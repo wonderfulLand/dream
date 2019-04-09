@@ -16,6 +16,7 @@ import com.ldu.service.UserService;
 import com.ldu.util.DateUtil;
 import com.ldu.util.MD5;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -61,23 +62,22 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/addUser")
-	public Map<String,String> addUser(HttpServletRequest request, @ModelAttribute("user") User user1) {
+	public Map<String,String> addUser(HttpServletRequest request, @ModelAttribute("user") User user) {
 		Map<String,String>ret=new HashMap<String,String>();
 		ret.put("errCode", "0");
-		String url = request.getHeader("Referer");
 		try{
-			User user = userService.getUserByPhone(user1.getPhone());
-			if (user == null) {// 检测该用户是否已经注册
-				String t = DateUtil.getNowDate();
+			User cur_user = userService.getUserByPhone(user.getPhone());
+			if (cur_user == null) {// 检测该用户是否已经注册
+				String nowdate = DateUtil.getNowDate();
 				// 对密码进行MD5加密
-				String str = MD5.md5(user1.getPassword());
-				user1.setCreateAt(t);// 创建开始时间
-				user1.setPassword(str);
-				user1.setGoodsNum(0);
-				user1.setStatus((byte) 1);//初始正常状态
-				user1.setPower(100);
-				userService.addUser(user1);
-				purseService.addPurse(user1.getId());// 注册的时候同时生成钱包
+				String psd = DigestUtils.md5Hex(user.getPassword());
+				user.setCreateAt(nowdate);// 创建开始时间
+				user.setPassword(psd);
+				user.setGoodsNum(0);
+				user.setStatus((byte) 1);//初始正常状态
+				user.setPower(100);
+				userService.addUser(user);
+				purseService.addPurse(user.getId());// 注册的时候同时生成钱包
 			}
 		}catch(Exception e){
 			ret.put("errCode", "1");
@@ -114,20 +114,25 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/login")
-	public ModelAndView loginValidate(HttpServletRequest request, HttpServletResponse response, User user,
+	@ResponseBody
+	public Map<String,String> loginValidate(HttpServletRequest request, HttpServletResponse response, User user,
 			ModelMap modelMap) {
-		User cur_user = userService.getUserByPhone(user.getPhone());
-		String url = request.getHeader("Referer");
-		if (cur_user != null) {
-			String pwd = MD5.md5(user.getPassword());
-			if (pwd.equals(cur_user.getPassword())) {
-				if(cur_user.getStatus()==1) {
-				request.getSession().setAttribute("cur_user", cur_user);
-				return new ModelAndView("redirect:" + url);
-				}
-			}
+		Map<String,String>ret=new HashMap<String,String>();
+	    ret.put("errCode", "0");
+		try{
+		    User cur_user = userService.getUserByPhone(user.getPhone());
+		    user.setPassword(MD5.md5(user.getPassword()));
+		    if(cur_user!=null&&cur_user.equals(user)){
+		    	request.getSession().setAttribute("cur_user", cur_user);
+		    }else{
+			    ret.put("errCode", "1");
+			    ret.put("errMsg", "用户不存在");
+		    }
+		}catch(Exception e){
+			ret.put("errCode", "1");
+		    ret.put("errMsg", "登录失败，请重新登录");
 		}
-		return new ModelAndView("redirect:" + url);
+		return ret;
 	}
 
 	/**

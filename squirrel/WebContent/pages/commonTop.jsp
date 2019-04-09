@@ -50,9 +50,6 @@
 						</li>
 						<li><a href="<%=basePath%>user/allGoods">我发布的商品</a></li>
 						<li><a>${cur_user.username}</a></li>
-						<!-- <li class="notification">
-                        <i ng-click="showNotificationBox()" class="iconfont"></i>
-                    </li> -->
 						<li class="changemore"><a class="changeMoreVertShow()"> <i
 								class="iconfont"></i>
 						</a>

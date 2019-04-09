@@ -16,7 +16,7 @@
 					<a onclick="showSignup()">
 						<div class="col s12 title"></div>
 					</a>
-					<form action="<%=basePath%>user/addUser" method="POST" role="form" id="formUser"
+					<form action="<%=basePath%>user/addUser" method="POST" role="form" id="registForm"
 						id="signup_form">
 						<div class="input-field col s12">
 							<input type="text" name="username" required="required"

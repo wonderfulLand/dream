@@ -18,7 +18,7 @@
 					<a onclick="showLogin()">
 						<div class="col s12 title"></div>
 					</a>
-					<form action="<%=basePath%>user/login" method="post" role="form">
+					<form action="<%=basePath%>user/login" method="post" role="form" id="loginForm">
 						<div class="input-field col s12">
 							<input type="text" name="phone" id="login_phone"
 								required="required" pattern="^1[0-9]{10}$"
@@ -36,8 +36,7 @@
 							</label>
 							<!--   <a ng-click="showForget()" class="forget-btn">忘记密码？</a> -->
 						</div>
-						<button type="submit" id="loginIn"
-							class="waves-effect waves-light btn login-btn red lighten-1">
+						<button type="button"  onclick="loginIn()" class="waves-effect waves-light btn login-btn red lighten-1">
 							<i class="iconfont left"></i> <em>登录</em>
 						</button>
 						<div class="col s12 signup-area">

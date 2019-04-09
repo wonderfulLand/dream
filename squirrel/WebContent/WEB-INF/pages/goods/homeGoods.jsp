@@ -20,11 +20,24 @@
 <link rel="stylesheet" href="<%=basePath%>css/user.css" />
 <script>
       $(function(){
+    	  //初始化页面
     	  $("#commonLeft").load("../pages/commonLeft.jsp"); 
     	  $("#commonTop").load("../pages/commonTop.jsp"); 	
     	  $("#commonlogIn").load("../pages/commonlogIn.jsp"); 	
     	  $("#commonReg").load("../pages/commonReg.jsp"); 	
-    	  $("#commonModify").load("../pages/commonModify.jsp"); 	
+    	  $("#commonModify").load("../pages/commonModify.jsp");
+    	  //查询菜单项
+    	  $.ajax({
+    	        type:"GET",
+    	        url:"<%=basePath%>menu/getMenu",
+    	        dataType:"json", 
+    	        success:function(data){
+    	        	
+    	        },
+    	        error:function(err){
+    	          
+    	        }
+    	  });	
       });
 </script>
 </head>
@@ -41,10 +54,9 @@
     <div id="commonLeft"></div>
    <!--  描述：右侧显示部分-->
 	<div class="main-content">
-	<!--
-        描述：右侧banner（图片）部分
-    -->
-		<div class="slider-wapper">
+	
+	<!-- 最上方的图片 -->
+	<div class="slider-wapper">
 			<div class="slider"
 				style="height: 440px; touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
 				<ul class="slides" style="height: 400px;">
@@ -58,12 +70,23 @@
 					</a></li>
 				</ul>
 			</div>
-		</div>
+	</div>
+		
+	<c:forEach items="${menuList}" var="menuMap" varStatus="status">	
+		<div class="index-title">
+			<a href="">${menuMap.name}</a>
+			<hr class="hr1">
+			<hr class="hr2">
+		</div>		
+	</c:forEach>	
+		
+		
+		
 		<!--
 
         描述：最新发布
     -->
-		<div class="index-title">
+	  <%-- 	<div class="index-title">
 			<a href="">最新发布</a>
 			<hr class="hr1">
 			<hr class="hr2">
@@ -327,6 +350,6 @@
 				</c:forEach>
 			</div>
 		</div>
-	</div>
+	</div> --%>
 </body>
 </html>

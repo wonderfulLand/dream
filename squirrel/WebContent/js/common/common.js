@@ -4,7 +4,7 @@ function addUser(){
                    type: "POST",//方法类型
                    dataType: "json",//预期服务器返回的数据类型
                    url: "../user/addUser",
-                   data: $('#formUser').serialize(),
+                   data: $('#registForm').serialize(),
                    success: function (result) {
                        if (result.errCode == "0") {
                            alert("注册成功，请登陆");
@@ -18,6 +18,27 @@ function addUser(){
                        alert("异常！");
                    }
            });
+}
+//登录
+function loginIn(){
+	 $.ajax({
+         type: "POST",//方法类型
+         dataType: "json",//预期服务器返回的数据类型
+         url: "../user/login",
+         data: $('#loginForm').serialize(),
+         success: function (result) {
+             if (result.errCode == "0") {
+                 alert("登陆成功");
+                 showLogin();
+             }else{
+          	   alert(result.errMsg);
+             }
+             ;
+         },
+         error : function() {
+             alert("异常！");
+         }
+     });	
 }
 function showLogin() {
     if($("#signup-show").css("display")=='block'){
