@@ -21,7 +21,7 @@
 </head>
 <body>
 	<div id="loginbox">
-		<h1 style="text-align: center;">猿来入此校园二手市场管理系统</h1>
+		<h1 style="text-align: center;">锦绣河山</h1>
 		<form id="loginform" class="form-vertical"
 			action="<%=basePath%>admin/index" method="post" role="form">
 			<div class="control-group normal_text"></div>

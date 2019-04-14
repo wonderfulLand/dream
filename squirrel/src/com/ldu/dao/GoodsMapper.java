@@ -9,6 +9,8 @@ import com.ldu.pojo.Comments;
 import com.ldu.pojo.Goods;
 
 public interface GoodsMapper {
+	
+	int queryMaxId();
     /**
      * 通过主键删除
      * @param id

@@ -14,7 +14,6 @@ import com.ldu.service.NoticeService;
 import com.ldu.service.PurseService;
 import com.ldu.service.UserService;
 import com.ldu.util.DateUtil;
-import com.ldu.util.MD5;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
@@ -121,7 +120,7 @@ public class UserController {
 	    ret.put("errCode", "0");
 		try{
 		    User cur_user = userService.getUserByPhone(user.getPhone());
-		    user.setPassword(MD5.md5(user.getPassword()));
+		    user.setPassword(DigestUtils.md5Hex(user.getPassword()));
 		    if(cur_user!=null&&cur_user.equals(user)){
 		    	request.getSession().setAttribute("cur_user", cur_user);
 		    }else{

@@ -328,9 +328,6 @@ public class GoodsController {
 	public ModelAndView publishGoods(HttpServletRequest request) {
 		// 可以校验用户是否登录
 		User cur_user = (User) request.getSession().getAttribute("cur_user");
-		// if (cur_user == null) {
-		// return "/goods/homeGoods";
-		// } else {
 		Integer userId = cur_user.getId();
 		Purse myPurse = purseService.getPurseByUserId(userId);
 		ModelAndView mv = new ModelAndView();
@@ -346,25 +343,34 @@ public class GoodsController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/publishGoodsSubmit")
-	public String publishGoodsSubmit(HttpServletRequest request, Image ima, Goods goods, MultipartFile image)
+	@ResponseBody
+	public Map<String,Object> publishGoodsSubmit(HttpSession session,HttpServletRequest request,Goods good,String imgUrl)
 			throws Exception {
-		// 查询出当前用户cur_user对象，便于使用id
-		User cur_user = (User) request.getSession().getAttribute("cur_user");
-		goods.setUserId(cur_user.getId());
-		goodsService.addGood(goods, 10);// 在goods表中插入物品
-		// 返回插入的该物品的id
-		int goodsId = goods.getId();
-		ima.setGoodsId(goodsId);
-		imageService.insert(ima);// 在image表中插入商品图片
-		// 发布商品后，catlog的number+1，user表的goods_num+1，更新session的值
-		int number = cur_user.getGoodsNum();
-		Integer calelog_id = goods.getCatelogId();
-		Catelog catelog = catelogService.selectByPrimaryKey(calelog_id);
-		catelogService.updateCatelogNum(calelog_id, catelog.getNumber() + 1);
-		userService.updateGoodsNum(cur_user.getId(), number + 1);
-		cur_user.setGoodsNum(number + 1);
-		request.getSession().setAttribute("cur_user", cur_user);// 修改session值
-		return "redirect:/user/allGoods";
+		Map<String,Object>ret=new HashMap<String,Object>();
+		ret.put("errorCode", "0");
+	    try{
+	    	User cur_user = (User) request.getSession().getAttribute("cur_user");
+			Image img=new Image();
+			good.setUserId(cur_user.getId());
+			goodsService.addGood(good, 10);		
+			int gooid=goodsService.querMaxId();
+			if(imgUrl.contains(";")){
+				String[] imgUrls=imgUrl.split(";");
+				for(int i=0;i<imgUrls.length;i++){
+					img.setImgUrl(imgUrls[i]);
+					img.setGoodsId(gooid);
+					imageService.insert(img);
+				}
+			}else{
+				img.setImgUrl(imgUrl);
+				img.setGoodsId(gooid);
+				imageService.insert(img);
+			}
+	    }catch(Exception e){
+	    	ret.put("errorMsg", e.getMessage());
+	    	ret.put("errorCode", "1");
+	    }
+		return ret;
 	}
 
 	/**
@@ -380,6 +386,7 @@ public class GoodsController {
 	@RequestMapping(value = "/uploadFile")
 	public Map<String, Object> uploadFile(HttpSession session, MultipartFile myfile)
 			throws IllegalStateException, IOException {
+		    Map<String, Object> ret = new HashMap<String, Object>();
 			// 原始名称
 			String oldFileName = myfile.getOriginalFilename(); // 获取上传文件的原名
 			// 存储图片的物理路径
@@ -394,15 +401,13 @@ public class GoodsController {
 				// 将内存中的数据写入磁盘
 				myfile.transferTo(newFile);
 				// 将新图片名称返回到前端
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("success", "成功啦");
-				map.put("imgUrl", newFileName);
-				return map;
+				ret.put("errorCode", "0");
+				ret.put("imgUrl", "upload/"+newFileName);
 			} else {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("error", "图片不合法");
-				return map;
+				ret.put("errorCode", "1");
 			}
+			return ret;
+
 		}
 
 	/**

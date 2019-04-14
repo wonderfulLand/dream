@@ -7,8 +7,9 @@ function addUser(){
                    data: $('#registForm').serialize(),
                    success: function (result) {
                        if (result.errCode == "0") {
+                    	   showLogin();
                            alert("注册成功，请登陆");
-                           showLogin();
+                           
                        }else{
                     	   alert("失败");
                        }
@@ -28,10 +29,13 @@ function loginIn(){
          data: $('#loginForm').serialize(),
          success: function (result) {
              if (result.errCode == "0") {
+            	 if($("#login-show").css("display")=='block'){
+            		 $("#login-show").css("display","none");
+            	 }
                  alert("登陆成功");
-                 showLogin();
+                 location.reload();         
              }else{
-          	   alert(result.errMsg);
+          	   alert(result.errMsg+"---");
              }
              ;
          },

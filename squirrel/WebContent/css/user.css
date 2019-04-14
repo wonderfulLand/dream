@@ -181,6 +181,7 @@
 }
 
 .sha .publ .text_pu .emoji-wysiwyg-editor {
+	background-color: hsla(0, 0%, 71%, .1);
 	position: relative;
 	z-index: 2;
 	outline: 0;

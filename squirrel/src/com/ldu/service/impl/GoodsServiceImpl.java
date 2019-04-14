@@ -130,5 +130,11 @@ public class GoodsServiceImpl implements GoodsService {
 	public void addComments(Comments comments) {
 		goodsMapper.addComments(comments);
 	}
+
+	@Override
+	public int querMaxId() {
+		
+		return goodsMapper.queryMaxId();
+	}
 }
 

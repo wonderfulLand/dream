@@ -26,15 +26,16 @@ public class User{
 
     private Byte status;
    
-    @Override
+   
+    
+    
+    
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((createAt == null) ? 0 : createAt.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 
@@ -47,11 +48,6 @@ public class User{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (createAt == null) {
-			if (other.createAt != null)
-				return false;
-		} else if (!createAt.equals(other.createAt))
-			return false;
 		if (password == null) {
 			if (other.password != null)
 				return false;
@@ -61,16 +57,6 @@ public class User{
 			if (other.phone != null)
 				return false;
 		} else if (!phone.equals(other.phone))
-			return false;
-		if (status == null) {
-			if (other.status != null)
-				return false;
-		} else if (!status.equals(other.status))
-			return false;
-		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
 			return false;
 		return true;
 	}

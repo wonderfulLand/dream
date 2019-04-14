@@ -108,5 +108,7 @@ public interface GoodsService {
 	 * @param id
 	 */
 	public void addComments(Comments comments);
+	
+	public int  querMaxId();
 
 }

@@ -363,7 +363,10 @@
 		set status = #{status,jdbcType=INTEGER}
 		where id = #{id,jdbcType=INTEGER}
 	</update>
-
+	
+	<select id="queryMaxId" resultType="int">
+	 select max(id) from goods
+	</select>
 
 
 </mapper>
